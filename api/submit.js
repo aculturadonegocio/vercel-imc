@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Índice de Maturidade Cultural</title>
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Lato:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary-bg: #0A1A2A;
+        --primary-yellow: #FFBA00;
+        --primary-overlay: #FFFFFF99;
+        --compl-1: #07131F;
+        --compl-2: #0F1F33;
+        --compl-3: #17314E;
+        --compl-4: #00C853;
+        --text-light: #FFFFFF;
+        --text-muted: #FFFFFF99;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: 'Lato', 'Montserrat', Arial, sans-serif;
+        background: radial-gradient(circle at top, #17314E 0, #0A1A2A 40%, #07131F 100%);
+        color: var(--text-light);
+      }
+
+      .app-container {
+        min-height: 0;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 24px 24px 40px;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 980px;
+        background: linear-gradient(135deg, rgba(10, 26, 42, 0.96), rgba(7, 19, 31, 0.98));
+        border-radius: 18px;
+        padding: 28px 24px 32px;
+        box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+
+      .logo {
+        width: 78px;
+        height: 78px;
+        border-radius: 16px;
+        overflow: hidden;
+        background-color: #0A1A2A;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .title-block h1 {
+        font-family: 'Montserrat', Arial, sans-serif;
+        font-size: 22px;
+        margin: 0;
+        color: var(--primary-yellow);
+      }
+
+      .title-block p {
+        margin: 4px 0 0 0;
+        font-size: 13px;
+        color: var(--text-muted);
+        max-width: 520px;
+      }
+
+      .hidden { display: none; }
+
+      /* ---------- TELA 1 ---------- */
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px 18px;
+        margin-top: 12px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 13px;
+      }
+
+      label {
+        font-size: 13px;
+        color: var(--primary-overlay);
+      }
+
+      input[type="text"],
+      input[type="email"],
+      select {
+        padding: 9px 11px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(7, 19, 31, 0.96);
+        color: #ffffff;
+        font-size: 13px;
+        outline: none;
+      }
+
+      select { cursor: pointer; }
+
+      .btn-row {
+        margin-top: 24px;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .btn-primary {
+        border: none;
+        border-radius: 999px;
+        padding: 10px 26px;
+        font-size: 13px;
+        font-weight: 700;
+        font-family: 'Montserrat', Arial, sans-serif;
+        cursor: pointer;
+        background: var(--primary-yellow);
+        color: #0A1A2A;
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+
+      .btn-secondary {
+        border-radius: 999px;
+        padding: 8px 18px;
+        font-size: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: transparent;
+        color: var(--text-light);
+        cursor: pointer;
+      }
+
+      /* ---------- TELA 2 (perguntas) ---------- */
+
+      .question-block {
+        padding: 16px 16px 18px;
+        border-radius: 12px;
+        background: rgba(7, 19, 31, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        margin-bottom: 18px;
+      }
+
+      .question-title {
+        font-family: 'Montserrat', Arial, sans-serif;
+        font-size: 14px;
+        margin: 0 0 6px 0;
+        color: var(--primary-yellow);
+        font-weight: 700;
+      }
+
+      .question-subtitle {
+        font-size: 13px;
+        margin: 0 0 10px 0;
+        color: #F4F4F4;
+      }
+
+      /* ---------- TELA 3 (resultado) ---------- */
+
+      .result-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.7fr);
+        gap: 22px;
+        margin-top: 8px;
+      }
+
+      .result-card {
+        background: rgba(7, 19, 31, 0.95);
+        border-radius: 14px;
+        padding: 18px 16px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .result-card h2 {
+        margin: 0 0 22px 0;
+        font-size: 15px;
+        font-family: 'Montserrat', Arial, sans-serif;
+        color: var(--primary-yellow);
+      }
+
+      .result-card-left {
+        text-align: center;
+      }
+
+      .score-text {
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--primary-overlay);
+      }
+
+      .cta-text {
+        margin-top: 18px;
+        font-size: 13px;
+        color: var(--primary-overlay);
+      }
+
+      .final-note {
+        margin-top: 18px;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      #previewDescription p {
+        margin: 0 0 10px 0;
+      }
+
+      /* ---------- GAUGE (SVG) ---------- */
+
+      .gauge-wrapper {
+        margin: 18px 0 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .gauge {
+        width: 220px;
+        height: 120px;
+        overflow: hidden;
+      }
+
+      .gauge svg {
+        width: 100%;
+        height: auto;
+      }
+
+      .gauge-segment {
+        fill: none;
+        stroke-width: 22;
+        stroke-linecap: butt;
+      }
+
+      .gauge-segment.red    { stroke: #FF3B30; }
+      .gauge-segment.orange { stroke: #FF6A00; }
+      .gauge-segment.yellow { stroke: #FFBA00; }
+      .gauge-segment.green1 { stroke: #34C759; }
+      .gauge-segment.green2 { stroke: #0F9D58; }
+
+      .gauge-center-arc {
+        fill: none;
+        stroke: #0A1A2A;
+        stroke-width: 48;
+      }
+
+      .gauge-text {
+        font-size: 11px;
+        fill: #FFFFFFCC;
+        font-family: 'Lato', Arial, sans-serif;
+      }
+
+      .gauge-pointer-line {
+        stroke: #FFFFFF;
+        stroke-width: 4;
+        stroke-linecap: round;
+      }
+
+      .gauge-pointer-hub {
+        fill: #FFFFFF;
+        stroke: #0A1A2A;
+        stroke-width: 2;
+      }
+
+      @media (max-width: 768px) {
+        .card {
+          padding: 20px 16px 24px;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .result-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .header {
+          align-items: flex-start;
+        }
+
+        .title-block h1 {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-container">
+      <div class="card">
+        <!-- CABEÇALHO -->
+        <div class="header">
+          <div class="logo">
+            <img
+              src="https://static.wixstatic.com/media/828c05_81852f6f36c64222828d3b3a1c1ddc0f~mv2.png/v1/fill/w_104,h_104,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Design%20sem%20nome%20(6).png"
+              alt="A Cultura do Negócio"
+            />
+          </div>
+          <div class="title-block">
+            <h1>Índice de Maturidade Cultural</h1>
+            <p>
+              Descubra, em menos de cinco minutos, se a cultura da sua empresa sustenta o crescimento
+              ou sabota seus resultados.
+            </p>
+          </div>
+        </div>
+
+        <!-- TELA 1 -->
+        <section id="screen1">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="respondentName">Seu nome</label>
+              <input type="text" id="respondentName" />
+            </div>
+
+            <div class="form-group">
+              <label for="companyName">Nome da empresa</label>
+              <input type="text" id="companyName" />
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" />
+            </div>
+
+            <div class="form-group">
+              <label for="companySize">Tamanho da empresa</label>
+              <select id="companySize">
+                <option value="">Selecione uma opção</option>
+                <option value="Até 10 colaboradores">Até 10 colaboradores</option>
+                <option value="De 11 a 20 colaboradores">De 11 a 20 colaboradores</option>
+                <option value="De 21 a 50 colaboradores">De 21 a 50 colaboradores</option>
+                <option value="De 51 a 100 colaboradores">De 51 a 100 colaboradores</option>
+                <option value="Acima de 100 colaboradores">Acima de 100 colaboradores</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="role">Cargo</label>
+              <select id="role">
+                <option value="">Selecione uma opção</option>
+                <option value="CEO / Sócio">CEO / Sócio</option>
+                <option value="Gerente / Coordenador">Gerente / Coordenador</option>
+                <option value="RH / Pessoas">RH / Pessoas</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button id="btnStart" class="btn-primary">COMEÇAR O TESTE</button>
+          </div>
+        </section>
+
+        <!-- TELA 2 -->
+        <section id="screen2" class="hidden">
+          <h2 style="margin:0 0 4px 0;font-size:15px;font-family:'Montserrat',Arial,sans-serif;color:#FFFFFF;">
+            Avaliação dos 10 pilares da cultura
+          </h2>
+          <p style="margin:0 0 12px 0;font-size:12px;color:#FFFFFF99;">
+            Marque a alternativa que melhor representa a realidade atual da sua empresa.
+          </p>
+
+          <div id="questionsWrapper"></div>
+
+          <div style="display:flex;justify-content:space-between;margin-top:16px;">
+            <button id="btnBackTo1" class="btn-secondary">Voltar</button>
+            <button id="btnSubmit" class="btn-primary">VER MEU RESULTADO</button>
+          </div>
+        </section>
+
+        <!-- TELA 3 -->
+        <section id="screen3" class="hidden">
+          <div class="result-layout">
+            <!-- ESQUERDA -->
+            <div class="result-card result-card-left">
+              <h2>Resultado do Índice de Maturidade Cultural</h2>
+
+              <div class="gauge-wrapper">
+                <div class="gauge">
+                  <svg viewBox="0 0 260 140">
+                    <path class="gauge-center-arc" d="M20 130 A110 110 0 0 1 240 130"></path>
+
+                    <path class="gauge-segment red" d="M20 130 A110 110 0 0 1 41.0 65.34"></path>
+                    <path class="gauge-segment orange" d="M41.0 65.34 A110 110 0 0 1 96.0 25.38"></path>
+                    <path class="gauge-segment yellow" d="M96.0 25.38 A110 110 0 0 1 164.0 25.38"></path>
+                    <path class="gauge-segment green1" d="M164.0 25.38 A110 110 0 0 1 219.0 65.34"></path>
+                    <path class="gauge-segment green2" d="M219.0 65.34 A110 110 0 0 1 240 130"></path>
+
+                    <line id="pointerLine" x1="130" y1="130" x2="130" y2="42" class="gauge-pointer-line"></line>
+
+                    <circle cx="130" cy="130" r="6" class="gauge-pointer-hub"></circle>
+
+                    <text x="38" y="132" class="gauge-text">10</text>
+                    <text x="130" y="38" class="gauge-text" text-anchor="middle">30</text>
+                    <text x="222" y="132" class="gauge-text" text-anchor="end">50</text>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="score-text" id="scoreText"></div>
+              <div class="score-text" id="levelText" style="margin-top:4px;"></div>
+
+              <p class="final-note">
+                Este resultado foi enviado para o seu e-mail.
+              </p>
+            </div>
+
+            <!-- DIREITA -->
+            <div class="result-card">
+              <h2 id="previewTitle">Nome do nível</h2>
+              <div id="previewDescription" style="margin-top:6px;"></div>
+
+              <p class="cta-text">
+                Quer um diagnóstico completo? Clique aqui e fale com um de nossos especialistas.
+              </p>
+
+              <a
+                id="whatsappButton"
+                href="https://api.whatsapp.com/send/?phone=5511976743472&text=Ol%C3%A1!%20Quero%20solicitar%20meu%20resultado%20completo&type=phone_number"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-primary"
+                style="display:inline-block;margin-top:4px;"
+              >
+                SOLICITE AGORA O SEU DIAGNÓSTICO COMPLETO
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      var state = {
+        companyName: '',
+        respondentName: '',
+        email: '',
+        companySize: '',
+        role: '',
+        answers: []
+      };
+
+      var questions = [
+        {
+          pillar: 'Clareza Cultural',
+          question:
+            'Se você perguntar a um dos seus colaboradores qual é o propósito da empresa e o que se espera do trabalho dele, o que aconteceria?',
+          options: [
+            { value: 1, text: 'Ele não saberia responder.' },
+            { value: 2, text: 'Ele diria algo genérico, sem clareza do que se espera dele.' },
+            { value: 3, text: 'Ele diria o que já ouviu em reuniões, mas não age conforme isso.' },
+            { value: 4, text: 'Ele responderia com clareza e demonstraria na prática.' },
+            { value: 5, text: 'Ele responderia com clareza e conectaria com metas e resultados.' }
+          ]
+        },
+        {
+          pillar: 'Liderança',
+          question: 'Como os líderes tomam decisões e conduzem o time?',
+          options: [
+            { value: 1, text: 'Cada líder decide do seu jeito.' },
+            { value: 2, text: 'Existe orientação, mas cada um aplica como quer.' },
+            { value: 3, text: 'Há padrões definidos, mas só funcionam com cobrança.' },
+            { value: 4, text: 'Os líderes seguem o mesmo padrão de gestão.' },
+            { value: 5, text: 'Os líderes fortalecem o negócio de forma autônoma e alinhada.' }
+          ]
+        },
+        {
+          pillar: 'Pessoas e Comportamentos',
+          question:
+            'O que acontece quando um colaborador tem bom desempenho técnico, mas apresenta atitudes negativas como resistência, desrespeito, individualismo ou influência tóxica?',
+          options: [
+            { value: 1, text: 'Ele é mantido mesmo prejudicando o ambiente.' },
+            { value: 2, text: 'A liderança reconhece o problema, mas evita agir.' },
+            { value: 3, text: 'O empresário tenta ajustar, mas ainda aceita esse perfil.' },
+            { value: 4, text: 'Se não mudar, é desligado.' },
+            { value: 5, text: 'Esse tipo de comportamento já não se mantém na empresa.' }
+          ]
+        },
+        {
+          pillar: 'Processos',
+          question: 'Como os processos operacionais são executados?',
+          options: [
+            { value: 1, text: 'Cada pessoa faz do seu jeito.' },
+            { value: 2, text: 'Existem processos, mas não são seguidos.' },
+            { value: 3, text: 'Os processos são seguidos apenas com supervisão.' },
+            { value: 4, text: 'Os processos são seguidos de forma disciplinada.' },
+            { value: 5, text: 'Os processos são seguidos e melhorados continuamente pelo time.' }
+          ]
+        },
+        {
+          pillar: 'Resultados Financeiros',
+          question: 'Como você caracterizaria os resultados financeiros da sua empresa hoje?',
+          options: [
+            { value: 1, text: 'Instáveis ou insuficientes para manter o negócio com segurança.' },
+            { value: 2, text: 'Variam bastante, sem padrão ou previsibilidade.' },
+            { value: 3, text: 'São alcançados, mas exigem esforço extremo e cobrança diária.' },
+            { value: 4, text: 'São estáveis com base em método e disciplina do time.' },
+            { value: 5, text: 'Crescem com previsibilidade, lucro recorrente e possibilidade de escalar.' }
+          ]
+        },
+        {
+          pillar: 'Comunicação',
+          question: 'Como a comunicação acontece dentro da empresa?',
+          options: [
+            { value: 1, text: 'As informações não chegam às pessoas certas ou chegam atrasadas.' },
+            { value: 2, text: 'As mensagens são passadas, mas cada um entende de um jeito.' },
+            { value: 3, text: 'A comunicação acontece, mas exige repetição para garantir entendimento.' },
+            { value: 4, text: 'A comunicação é clara e todos sabem o que precisam fazer.' },
+            { value: 5, text: 'A comunicação é direta e organizada, garantindo alinhamento entre áreas.' }
+          ]
+        },
+        {
+          pillar: 'Engajamento e Responsabilidade',
+          question: 'Como os colaboradores se comportam em relação aos resultados?',
+          options: [
+            { value: 1, text: 'Esperam orientação o tempo todo e evitam responsabilidade.' },
+            { value: 2, text: 'Alguns se esforçam, mas a maioria depende de cobrança.' },
+            { value: 3, text: 'Existe envolvimento, mas precisa de acompanhamento.' },
+            { value: 4, text: 'O time se responsabiliza e resolve problemas com autonomia.' },
+            { value: 5, text: 'O time age com visão de dono e busca melhorias sem ser solicitado.' }
+          ]
+        },
+        {
+          pillar: 'Tomada de Decisão',
+          question: 'Como as decisões estratégicas são tomadas na sua empresa?',
+          options: [
+            { value: 1, text: 'São tomadas conforme urgência do momento.' },
+            { value: 2, text: 'Mudam com frequência por fatores externos.' },
+            { value: 3, text: 'Existem critérios, mas não são consistentes.' },
+            { value: 4, text: 'Seguem padrão claro alinhado aos objetivos.' },
+            { value: 5, text: 'São planejadas com base em dados, metas e previsões.' }
+          ]
+        },
+        {
+          pillar: 'Inovação e Melhoria Contínua',
+          question: 'Como sua empresa lida com melhorias e inovação?',
+          options: [
+            { value: 1, text: 'Só muda algo quando o problema já gerou impacto negativo.' },
+            { value: 2, text: 'As melhorias são discutidas, mas raramente aplicadas.' },
+            { value: 3, text: 'Melhorias acontecem, mas dependem do dono.' },
+            { value: 4, text: 'A empresa evolui constantemente com participação do time.' },
+            { value: 5, text: 'A melhoria contínua impulsiona resultados melhores e mais rápidos.' }
+          ]
+        },
+        {
+          pillar: 'Retenção e Atratividade',
+          question: 'Como você avalia a capacidade da empresa de atrair e manter bons profissionais?',
+          options: [
+            { value: 1, text: 'É difícil contratar e quem entra não permanece.' },
+            { value: 2, text: 'Conseguimos contratar, mas perdemos bons profissionais com frequência.' },
+            { value: 3, text: 'Há rotatividade em posições importantes.' },
+            { value: 4, text: 'Atraímos e mantemos profissionais alinhados.' },
+            { value: 5, text: 'A empresa é reconhecida e retém talentos naturalmente.' }
+          ]
+        }
+      ];
+
+      function renderQuestions() {
+        var wrapper = document.getElementById('questionsWrapper');
+        wrapper.innerHTML = '';
+
+        for (var i = 0; i < questions.length; i++) {
+          var q = questions[i];
+          var block = document.createElement('div');
+          block.className = 'question-block';
+
+          var html = '';
+          html += '<p class="question-title">' + q.pillar + '</p>';
+          html += '<p class="question-subtitle">' + q.question + '</p>';
+          html += '<select data-index="' + i + '">';
+          html += '<option value="">Selecione uma alternativa</option>';
+          for (var j = 0; j < q.options.length; j++) {
+            var o = q.options[j];
+            html += '<option value="' + o.value + '">' + o.text + '</option>';
+          }
+          html += '</select>';
+
+          block.innerHTML = html;
+          wrapper.appendChild(block);
+        }
+      }
+
+      function goToScreen(id) {
+        var ids = ['screen1', 'screen2', 'screen3'];
+        for (var i = 0; i < ids.length; i++) {
+          var el = document.getElementById(ids[i]);
+          if (ids[i] === id) {
+            el.classList.remove('hidden');
+          } else {
+            el.classList.add('hidden');
+          }
+        }
+      }
+
+      function collectScreen1() {
+        state.companyName = document.getElementById('companyName').value.trim();
+        state.respondentName = document.getElementById('respondentName').value.trim();
+        state.email = document.getElementById('email').value.trim();
+        state.companySize = document.getElementById('companySize').value;
+        state.role = document.getElementById('role').value;
+
+        if (!state.companyName || !state.respondentName || !state.email || !state.companySize || !state.role) {
+          alert('Preencha todos os campos antes de continuar.');
+          return false;
+        }
+
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(state.email)) {
+          alert('Digite um e-mail válido.');
+          return false;
+        }
+
+        return true;
+      }
+
+      function collectAnswers() {
+        var selects = document.querySelectorAll('#questionsWrapper select');
+        var answers = [];
+        for (var i = 0; i < selects.length; i++) {
+          var val = selects[i].value;
+          if (!val) {
+            alert('Responda todas as perguntas do teste antes de ver o resultado.');
+            return null;
+          }
+          answers.push(Number(val));
+        }
+        state.answers = answers;
+        return answers;
+      }
+
+      function updateGauge(score) {
+        var minScore = 10;
+        var maxScore = 50;
+        var s = score;
+        if (s < minScore) s = minScore;
+        if (s > maxScore) s = maxScore;
+
+        var ratio = (s - minScore) / (maxScore - minScore);
+        var angleDeg = 180 - ratio * 180;
+        var angleRad = angleDeg * Math.PI / 180;
+
+        var cx = 130;
+        var cy = 130;
+        var radius = 80;
+
+        var x2 = cx + radius * Math.cos(angleRad);
+        var y2 = cy - radius * Math.sin(angleRad);
+
+        var pointer = document.getElementById('pointerLine');
+        if (pointer) {
+          pointer.setAttribute('x1', cx);
+          pointer.setAttribute('y1', cy);
+          pointer.setAttribute('x2', x2);
+          pointer.setAttribute('y2', y2);
+        }
+      }
+
+      function showResultOnScreen(result) {
+        document.getElementById('scoreText').textContent = 'Pontuação: ' + result.totalScore + ' de 50 pontos';
+        document.getElementById('levelText').textContent = 'Nível: ' + result.levelKey;
+
+        document.getElementById('previewTitle').textContent = result.levelKey;
+        document.getElementById('previewDescription').innerHTML = result.descriptionHtml;
+
+        updateGauge(result.totalScore);
+        goToScreen('screen3');
+      }
+
+      window.onload = function () {
+        renderQuestions();
+
+        document.getElementById('btnStart').onclick = function () {
+          if (collectScreen1()) {
+            goToScreen('screen2');
+          }
+        };
+
+        document.getElementById('btnBackTo1').onclick = function () {
+          goToScreen('screen1');
+        };
+
+        document.getElementById('btnSubmit').onclick = function () {
+          var answers = collectAnswers();
+          if (!answers) return;
+
+          var btn = document.getElementById('btnSubmit');
+          btn.disabled = true;
+          btn.textContent = 'Calculando...';
+
+          var payload = {
+            companyName: state.companyName,
+            respondentName: state.respondentName,
+            email: state.email,
+            companySize: state.companySize,
+            role: state.role,
+            answers: answers
+          };
+
+          fetch('/api/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+            .then(async (res) => {
+              var data = await res.json();
+              if (!data.ok) {
+                throw new Error(data.error || 'Erro ao processar o resultado.');
+              }
+              return data.result;
+            })
+            .then((result) => {
+              btn.disabled = false;
+              btn.textContent = 'VER MEU RESULTADO';
+              showResultOnScreen(result);
+            })
+            .catch((err) => {
+              btn.disabled = false;
+              btn.textContent = 'VER MEU RESULTADO';
+              alert('Erro ao processar o resultado: ' + (err.message || 'Erro desconhecido.'));
+              console.log(err);
+            });
+        };
+      };
+    </script>
+  </body>
+</html>
