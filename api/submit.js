@@ -1,8 +1,6 @@
 module.exports = async function handler(req, res) {
-  // Sempre responder JSON
   res.setHeader("Content-Type", "application/json; charset=utf-8");
 
-  // CORS (se precisar futuramente, já está ok)
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -16,7 +14,6 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // Garantir que req.body existe e é objeto
     const body = req.body && typeof req.body === "object" ? req.body : null;
 
     if (!body) {
@@ -93,17 +90,24 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    const descriptionHtml = `
-      <p>${level.descriptionText}</p>
-    `;
+    const descriptionHtml = `<p>${level.descriptionText}</p>`;
 
-    // Envio de e-mail via API REST do Resend (sem dependência de biblioteca)
     const apiKey = process.env.RESEND_API_KEY;
 
+    // Mesmo sem key, devolve resultado (e sinaliza o erro)
     if (!apiKey) {
-      return res.status(500).json({
-        ok: false,
-        error: "RESEND_API_KEY não configurada no Vercel."
+      return res.status(200).json({
+        ok: true,
+        result: {
+          totalScore,
+          levelKey: level.key,
+          descriptionText: level.descriptionText,
+          descriptionHtml
+        },
+        emailSent: false,
+        emailError: {
+          message: "RESEND_API_KEY não configurada no Vercel."
+        }
       });
     }
 
@@ -121,9 +125,8 @@ module.exports = async function handler(req, res) {
       </div>
     `;
 
-    // IMPORTANTE:
-    // Se seu domínio ainda não estiver verificado no Resend,
-    // troque o "from" temporariamente para onboarding@resend.dev para testar.
+    // Se seu domínio ainda não estiver verificado, use temporariamente:
+    // const fromAddress = "onboarding@resend.dev";
     const fromAddress = "Índice Cultural <consultoria@aculturadonnegocio.com.br>";
 
     const sendResp = await fetch("https://api.resend.com/emails", {
@@ -142,23 +145,28 @@ module.exports = async function handler(req, res) {
 
     const sendText = await sendResp.text();
 
-    // Se der erro, devolve JSON com o retorno do Resend (pra gente enxergar)
     if (!sendResp.ok) {
-      return res.status(502).json({
-        ok: false,
-        error: "Falha ao enviar e-mail via Resend",
-        resendStatus: sendResp.status,
-        resendResponse: sendText
+      // Aqui: NÃO quebra, devolve resultado + erro detalhado
+      return res.status(200).json({
+        ok: true,
+        result: {
+          totalScore,
+          levelKey: level.key,
+          descriptionText: level.descriptionText,
+          descriptionHtml
+        },
+        emailSent: false,
+        emailError: {
+          status: sendResp.status,
+          response: sendText
+        }
       });
     }
 
-    // Se o Resend respondeu OK, tenta parsear
     let resendJson = null;
     try {
       resendJson = JSON.parse(sendText);
-    } catch (e) {
-      // ok, não bloqueia
-    }
+    } catch (e) {}
 
     return res.status(200).json({
       ok: true,
@@ -168,6 +176,7 @@ module.exports = async function handler(req, res) {
         descriptionText: level.descriptionText,
         descriptionHtml
       },
+      emailSent: true,
       resend: resendJson || { raw: sendText }
     });
 
